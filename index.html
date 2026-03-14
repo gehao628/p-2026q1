@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 硅基员工搭建计划与报价</title>
+<style>
+/* ========== Reset & Base ========== */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-card-hover: #1a1a26;
+  --border: rgba(255,255,255,0.06);
+  --text: #a0a0b0;
+  --text-dim: #6a6a7a;
+  --text-bright: #e8e8f0;
+  --purple: #8b5cf6;
+  --purple-dim: rgba(139,92,246,0.08);
+  --cyan: #06b6d4;
+  --cyan-dim: rgba(6,182,212,0.08);
+  --green: #10b981;
+  --green-dim: rgba(16,185,129,0.08);
+  --orange: #f59e0b;
+  --orange-dim: rgba(245,158,11,0.08);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ========== Watermark ========== */
+#watermark { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; overflow:hidden; }
+.watermark-text { position:absolute; font-size:14px; color:rgba(255,255,255,0.018); transform:rotate(-25deg); white-space:nowrap; font-weight:600; letter-spacing:2px; user-select:none; }
+
+/* ========== Layout ========== */
+.container { max-width:960px; margin:0 auto; padding:0 2rem; }
+
+section {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ========== Nav ========== */
+.nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  padding: 1rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.3s ease;
+}
+.nav.scrolled { background: rgba(10,10,15,0.92); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+.nav-brand { font-size:0.9rem; font-weight:700; color:var(--text-bright); letter-spacing:0.5px; }
+.nav-links { display:flex; gap:1.5rem; list-style:none; }
+.nav-links a { font-size:0.82rem; color:var(--text-dim); text-decoration:none; transition:color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color:var(--purple); }
+
+/* ========== Hero ========== */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(139,92,246,0.08), transparent),
+              radial-gradient(ellipse 40% 40% at 70% 60%, rgba(6,182,212,0.05), transparent);
+}
+
+/* Floating orbs */
+.orb {
+  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4;
+  animation: float 8s ease-in-out infinite;
+}
+.orb-1 { width:300px; height:300px; background:rgba(139,92,246,0.15); top:20%; left:10%; animation-delay:0s; }
+.orb-2 { width:250px; height:250px; background:rgba(6,182,212,0.12); top:50%; right:10%; animation-delay:2s; }
+.orb-3 { width:200px; height:200px; background:rgba(16,185,129,0.1); bottom:20%; left:30%; animation-delay:4s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+.hero-content { position:relative; z-index:1; max-width:700px; padding:0 1.5rem; }
+.hero-tag {
+  display: inline-block;
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--purple); background: var(--purple-dim);
+  padding: 0.4rem 1.2rem; border-radius: 100px;
+  border: 1px solid rgba(139,92,246,0.15);
+  margin-bottom: 2rem;
+}
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800; line-height: 1.25;
+  color: var(--text-bright);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.5px;
+}
+.hero h1 .accent { color: var(--purple); }
+.hero h1 .accent-cyan { color: var(--cyan); }
+.hero-sub {
+  font-size: 1.05rem; color: var(--text); max-width: 560px; margin: 0 auto 2.5rem;
+  line-height: 1.8;
+}
+.hero-metrics {
+  display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap;
+  margin-top: 2rem;
+}
+.hero-metric { text-align: center; }
+.hero-metric .num { font-size: 1.8rem; font-weight: 800; color: var(--text-bright); }
+.hero-metric .label { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.2rem; }
+
+/* ========== Section Headers ========== */
+.section-header { margin-bottom: 3rem; }
+.section-number { font-size: 0.78rem; font-weight: 600; color: var(--purple); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem; }
+.section-title { font-size: 1.8rem; font-weight: 800; color: var(--text-bright); margin-bottom: 0.8rem; letter-spacing: -0.3px; }
+.section-desc { font-size: 0.95rem; color: var(--text); max-width: 600px; line-height: 1.8; }
+
+/* ========== Cards ========== */
+.card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 2rem; margin-bottom: 1.5rem;
+  transition: border-color 0.3s, background 0.3s;
+}
+.card:hover { border-color: rgba(139,92,246,0.15); background: var(--bg-card-hover); }
+
+/* ========== Roadmap ========== */
+.phase-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:2rem; }
+@media(max-width:700px){ .phase-grid{grid-template-columns:1fr;} }
+
+.phase-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; transition: border-color 0.3s, transform 0.2s;
+}
+.phase-card:hover { border-color: rgba(139,92,246,0.2); transform: translateY(-2px); }
+.phase-card.recommended { border-color: rgba(139,92,246,0.3); }
+.phase-card.recommended .phase-header { background: linear-gradient(135deg, rgba(139,92,246,0.12), rgba(6,182,212,0.08)); }
+
+.phase-header { padding:1.5rem 1.5rem 1rem; border-bottom:1px solid var(--border); }
+.phase-tag { font-size:0.72rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--purple); margin-bottom:0.3rem; }
+.phase-title { font-size:1.15rem; font-weight:700; color:var(--text-bright); margin-bottom:0.3rem; }
+.phase-price { font-size:1rem; font-weight:700; color:var(--cyan); }
+.phase-time { font-size:0.82rem; color:var(--text-dim); margin-top:0.2rem; }
+
+.phase-content { padding:1.5rem; }
+.phase-tasks { list-style:none; }
+.phase-tasks li {
+  font-size:0.88rem; color:var(--text); padding:0.5rem 0;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:flex-start; gap:0.5rem;
+}
+.phase-tasks li:last-child { border-bottom:none; }
+
+.day-tag {
+  display:inline-block; font-size:0.68rem; font-weight:700; padding:0.15rem 0.5rem;
+  border-radius:4px; white-space:nowrap; flex-shrink:0; margin-top:0.15rem;
+}
+.day-tag.diag { background:rgba(245,158,11,0.1); color:var(--orange); }
+.day-tag.build { background:var(--purple-dim); color:var(--purple); }
+.day-tag.train { background:var(--cyan-dim); color:var(--cyan); }
+.day-tag.report { background:var(--green-dim); color:var(--green); }
+
+/* ========== Gantt ========== */
+.gantt-container { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); padding:1.5rem; overflow-x:auto; }
+.gantt { min-width:600px; }
+.gantt-header {
+  display:grid; grid-template-columns:180px repeat(10, 1fr); gap:2px;
+  font-size:0.72rem; font-weight:700; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.5px;
+  padding-bottom:0.8rem; border-bottom:1px solid var(--border); margin-bottom:0.5rem;
+}
+.gantt-header span { text-align:center; }
+.gantt-header span:first-child { text-align:left; }
+.gantt-row {
+  display:grid; grid-template-columns:180px repeat(10, 1fr); gap:2px;
+  padding:0.3rem 0;
+}
+.gantt-label { font-size:0.78rem; color:var(--text); display:flex; align-items:center; }
+.gantt-cell { display:flex; align-items:center; justify-content:center; min-height:28px; }
+.gantt-bar {
+  width:90%; height:20px; border-radius:4px;
+  animation: barIn 0.6s ease both;
+}
+.gantt-bar.diag { background: linear-gradient(90deg, rgba(245,158,11,0.3), rgba(245,158,11,0.15)); }
+.gantt-bar.build { background: linear-gradient(90deg, rgba(139,92,246,0.3), rgba(139,92,246,0.15)); }
+.gantt-bar.train { background: linear-gradient(90deg, rgba(6,182,212,0.3), rgba(6,182,212,0.15)); }
+.gantt-bar.report { background: linear-gradient(90deg, rgba(16,185,129,0.3), rgba(16,185,129,0.15)); }
+
+@keyframes barIn { from { width:0; opacity:0; } to { width:90%; opacity:1; } }
+
+.gantt-legend { display:flex; gap:1.5rem; margin-top:1rem; padding-top:0.8rem; border-top:1px solid var(--border); flex-wrap:wrap; }
+.gantt-legend-item { display:flex; align-items:center; gap:0.4rem; font-size:0.75rem; color:var(--text-dim); }
+.gantt-legend-dot { width:12px; height:12px; border-radius:3px; }
+.gantt-legend-dot.diag { background:rgba(245,158,11,0.3); }
+.gantt-legend-dot.build { background:rgba(139,92,246,0.3); }
+.gantt-legend-dot.train { background:rgba(6,182,212,0.3); }
+.gantt-legend-dot.report { background:rgba(16,185,129,0.3); }
+
+/* ========== Deliverables ========== */
+.deliverable-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:1.5rem; }
+@media(max-width:700px){ .deliverable-grid{grid-template-columns:1fr;} }
+
+.deliverable-card {
+  background: var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm);
+  padding:1.5rem;
+  transition: border-color 0.3s;
+}
+.deliverable-card:hover { border-color: rgba(139,92,246,0.15); }
+.deliverable-card h4 { font-size:0.95rem; font-weight:700; color:var(--text-bright); margin-bottom:0.6rem; }
+.deliverable-card p { font-size:0.85rem; color:var(--text); line-height:1.7; }
+.deliverable-card ul { list-style:none; margin-top:0.5rem; }
+.deliverable-card ul li { font-size:0.85rem; color:var(--text); padding:0.25rem 0; padding-left:1rem; position:relative; }
+.deliverable-card ul li::before { content:"·"; position:absolute; left:0; color:var(--purple); font-weight:700; }
+
+.save-tag {
+  display:inline-block; font-size:0.72rem; font-weight:700; padding:0.2rem 0.6rem;
+  border-radius:4px; margin-top:0.6rem;
+}
+.save-tag.time { background:var(--green-dim); color:var(--green); }
+.save-tag.quality { background:var(--cyan-dim); color:var(--cyan); }
+
+/* ========== Workshop ========== */
+.workshop-timeline { display:flex; flex-direction:column; gap:0.8rem; }
+.wt-item { display:flex; gap:1rem; align-items:flex-start; padding:0.8rem 0; border-bottom:1px solid var(--border); }
+.wt-item:last-child { border-bottom:none; }
+.wt-time { font-size:0.78rem; font-weight:700; color:var(--purple); min-width:80px; flex-shrink:0; margin-top:0.1rem; }
+.wt-content { font-size:0.88rem; color:var(--text); line-height:1.7; }
+.wt-content strong { color:var(--text-bright); }
+
+/* ========== ROI ========== */
+.roi-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+@media(max-width:700px){ .roi-grid{grid-template-columns:1fr;} }
+
+.roi-card {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:2rem;
+}
+.roi-card h3 { font-size:1.05rem; font-weight:700; color:var(--text-bright); margin-bottom:1.5rem; }
+.roi-item { display:flex; justify-content:space-between; align-items:center; padding:0.6rem 0; border-bottom:1px solid var(--border); }
+.roi-item:last-child { border-bottom:none; }
+.roi-item .label { font-size:0.88rem; color:var(--text); }
+.roi-item .value { font-size:0.92rem; font-weight:700; color:var(--text-bright); text-align:right; }
+.roi-item .value.cost { color: var(--orange); }
+.roi-item .value.highlight { color: var(--green); }
+
+.roi-note {
+  font-size:0.82rem; color:var(--text-dim); margin-top:1rem; padding:1rem;
+  background: rgba(255,255,255,0.02); border-radius:var(--radius-sm); border:1px solid var(--border);
+  line-height:1.7;
+}
+
+/* ========== Benefits ========== */
+.benefits-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:1.5rem; }
+@media(max-width:700px){ .benefits-grid{grid-template-columns:1fr;} }
+
+.benefit-card {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-sm);
+  padding:1.5rem; display:flex; gap:1rem; align-items:flex-start;
+  transition: border-color 0.3s;
+}
+.benefit-card:hover { border-color:rgba(139,92,246,0.15); }
+.benefit-icon { font-size:1.3rem; flex-shrink:0; margin-top:0.1rem; }
+.benefit-card h4 { font-size:0.92rem; font-weight:700; color:var(--text-bright); margin-bottom:0.3rem; }
+.benefit-card p { font-size:0.82rem; color:var(--text); line-height:1.6; }
+
+/* ========== CTA ========== */
+.cta-section { border-bottom:none; }
+.cta-box {
+  text-align:center; padding:4rem 2rem;
+  background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(6,182,212,0.04));
+  border: 1px solid rgba(139,92,246,0.12); border-radius:var(--radius);
+}
+.cta-box h2 { font-size:1.6rem; font-weight:800; color:var(--text-bright); margin-bottom:0.8rem; }
+.cta-box p { font-size:0.95rem; color:var(--text); max-width:500px; margin:0 auto; }
+
+.cta-steps { display:flex; justify-content:center; align-items:center; gap:0.8rem; margin:2.5rem 0; flex-wrap:wrap; }
+.cta-step { text-align:center; }
+.cta-step-num { width:36px; height:36px; border-radius:50%; background:var(--purple-dim); border:1px solid rgba(139,92,246,0.2); display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:700; color:var(--purple); margin:0 auto 0.4rem; }
+.cta-step-text { font-size:0.78rem; color:var(--text-dim); }
+.cta-step-arrow { color:var(--text-dim); font-size:1.2rem; }
+
+.contact-name { font-size:1rem; font-weight:700; color:var(--text-bright); }
+
+/* ========== Footer ========== */
+.footer { padding:2rem 0; text-align:center; }
+.footer p { font-size:0.75rem; color:var(--text-dim); }
+.footer .conf { font-size:0.72rem; font-weight:600; letter-spacing:1.5px; color:rgba(139,92,246,0.4); text-transform:uppercase; margin-bottom:0.5rem; }
+
+/* ========== Scroll Reveal ========== */
+.reveal { opacity:0; transform:translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ========== Cost Table ========== */
+.cost-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+.cost-table th { text-align:left; padding:0.8rem 1rem; font-weight:700; color:var(--text-bright); border-bottom:2px solid var(--border); font-size:0.82rem; text-transform:uppercase; letter-spacing:0.5px; }
+.cost-table td { padding:0.8rem 1rem; border-bottom:1px solid var(--border); color:var(--text); }
+.cost-table tr:hover td { background:rgba(255,255,255,0.01); }
+
+/* ========== Pricing ========== */
+.pricing-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+@media(max-width:700px){ .pricing-grid{grid-template-columns:1fr;} }
+
+.pricing-card {
+  background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:2rem; position:relative;
+  transition: border-color 0.3s, transform 0.2s;
+}
+.pricing-card:hover { transform:translateY(-2px); }
+.pricing-card.recommended { border-color:rgba(139,92,246,0.3); }
+.pricing-recommended-tag {
+  position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+  background:var(--purple); color:#fff; font-size:0.72rem; font-weight:700;
+  padding:0.3rem 1rem; border-radius:100px; white-space:nowrap;
+}
+.pricing-tier { font-size:0.75rem; font-weight:700; color:var(--purple); letter-spacing:1px; text-transform:uppercase; margin-bottom:0.3rem; }
+.pricing-name { font-size:1.15rem; font-weight:700; color:var(--text-bright); margin-bottom:0.8rem; }
+.pricing-price { margin-bottom:1rem; }
+.pricing-amount { font-size:2rem; font-weight:800; color:var(--text-bright); }
+.pricing-desc { font-size:0.85rem; color:var(--text); margin-bottom:1.5rem; line-height:1.7; }
+.pricing-features { list-style:none; }
+.pricing-features li { font-size:0.85rem; color:var(--text); padding:0.4rem 0; display:flex; align-items:flex-start; gap:0.5rem; }
+.check { color:var(--green); font-weight:700; flex-shrink:0; }
+.cross { color:var(--text-dim); font-weight:700; flex-shrink:0; opacity:0.4; }
+</style>
+</head>
+<body>
+
+<!-- Watermark -->
+<div id="watermark"></div>
+
+<!-- Nav -->
+<nav class="nav" id="nav">
+  <div class="nav-brand">AI 硅基员工搭建方案</div>
+  <ul class="nav-links">
+    <li><a href="#why-now">为什么是现在</a></li>
+    <li><a href="#roadmap">推进路线</a></li>
+    <li><a href="#detail">方案详情</a></li>
+    <li><a href="#roi">投入与回报</a></li>
+    <li><a href="#pricing">报价</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-content">
+    <div class="hero-tag">AI 硅基员工搭建计划</div>
+    <h1>从<span class="accent">碳基团队</span><br>到<span class="accent-cyan">硅基智能组织</span></h1>
+    <p class="hero-sub">让每个岗位都拥有一个 24 小时在线的 AI 硅基员工——不替代人，而是让人专注在真正需要判断力和创造力的事情上。</p>
+    <div class="hero-metrics">
+      <div class="hero-metric">
+        <div class="num">1-2 周</div>
+        <div class="label">MVP 验证周期</div>
+      </div>
+      <div class="hero-metric">
+        <div class="num">销售 + 技术</div>
+        <div class="label">率先落地部门</div>
+      </div>
+      <div class="hero-metric">
+        <div class="num">五一前</div>
+        <div class="label">全公司铺开</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Now -->
+<section id="why-now">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-number">01 &mdash; 为什么是现在</div>
+      <h2 class="section-title">我们已经走在前面，窗口期稍纵即逝</h2>
+    </div>
+
+    <div class="card reveal">
+      <h3 style="font-size:1.05rem;font-weight:700;color:var(--text-bright);margin-bottom:1rem;">行业现状</h3>
+      <p style="font-size:0.92rem;line-height:1.9;">
+        电力供应链行业的大多数企业还在观望 AI。但大模型的能力已经到了一个临界点——它不再只是"聊天机器人"，而是能真正嵌入到业务流程中、处理具体工作的工具。
+      </p>
+      <p style="font-size:0.92rem;line-height:1.9;margin-top:1rem;">
+        我们团队已经完成了前期的 AI 模块规划，覆盖了公司各个核心岗位。<strong style="color:var(--text-bright);">现在缺的不是意识，而是技术的嵌入。</strong>把规划变成真正能跑起来的硅基员工，需要对大模型能力的深度理解、对业务场景的精准适配、以及对工具链的熟练搭建。
+      </p>
+    </div>
+
+    <div class="card reveal">
+      <h3 style="font-size:1.05rem;font-weight:700;color:var(--text-bright);margin-bottom:1rem;">AI 转型的本质</h3>
+      <p style="font-size:0.92rem;line-height:1.9;">
+        AI 转型的本质是<strong style="color:var(--purple);">硅基员工的落地</strong>，加上<strong style="color:var(--cyan);">技术能力</strong>和<strong style="color:var(--green);">组织能力的同步升级</strong>。大模型的能力在飞速进化，但怎么把这些能力跟我们具体的业务场景连接起来，怎么让团队的每个人都能用好这些工具——这中间需要一个懂技术、也懂业务的人来推动。
+      </p>
+      <p style="font-size:0.92rem;line-height:1.9;margin-top:1rem;">
+        这个方案就是这个桥梁：<strong style="color:var(--text-bright);">我来配合团队，一起梳理业务场景、做诊断、推落地，让每个岗位的硅基员工真正跑起来。</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Roadmap -->
+<section id="roadmap">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-number">02 &mdash; 推进路线</div>
+      <h2 class="section-title">两步走，五一前完成整体落地</h2>
+      <p class="section-desc">先用 1-2 周在销售和技术部门验证效果，然后快速铺开到全公司。</p>
+    </div>
+
+    <div class="phase-grid reveal">
+      <!-- Phase 1 -->
+      <div class="phase-card recommended">
+        <div class="phase-header">
+          <div class="phase-tag">Phase 1 &middot; MVP 验证</div>
+          <div class="phase-title">销售 + 技术，先跑起来</div>
+          <div class="phase-price">¥50,000</div>
+          <div class="phase-time">1-2 周 &middot; 驻场 + 远程 &middot; 可根据需求增减模块</div>
+        </div>
+        <div class="phase-content">
+          <ul class="phase-tasks">
+            <li><span class="day-tag diag">D1-2</span>业务深度访谈 & 流程梳理，识别各岗位的 AI 自动化切入点</li>
+            <li><span class="day-tag train">D2-3</span>全员 AI Workshop（第一场），建立团队对 AI 能力的正确认知</li>
+            <li><span class="day-tag build">D3-8</span>搭建销售硅基员工矩阵 + 同步配置后端 Claude Code 开发环境</li>
+            <li><span class="day-tag build">D3-5</span>OpenClaw 部署 & 配置，打通 AI Agent 运行基础设施</li>
+            <li><span class="day-tag train">D8-9</span>试运行 + 各部门一对一答疑 + 使用效果调研</li>
+            <li><span class="day-tag train">D9</span>结项 Workshop（第二场），分享使用经验 + 全员答疑</li>
+            <li><span class="day-tag report">D10</span>成果确认 + 第二阶段规划</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-card">
+        <div class="phase-header">
+          <div class="phase-tag">Phase 2 &middot; 全公司铺开</div>
+          <div class="phase-title">让每个人都有硅基员工</div>
+          <div class="phase-price">¥200,000 - 300,000</div>
+          <div class="phase-time">Phase 1 完成后启动 &middot; 五一前交付 &middot; 根据模块及第一阶段推进情况具体确定</div>
+        </div>
+        <div class="phase-content">
+          <ul class="phase-tasks">
+            <li><span class="day-tag build">铺开</span>将 Phase 1 验证过的方法扩展到其余部门，每个岗位配置专属硅基员工</li>
+            <li><span class="day-tag build">深化</span>已上线模块的持续优化，根据实际使用反馈迭代 Agent 能力</li>
+            <li><span class="day-tag train">培训</span>各部门深度使用指导，确保每个人都能独立使用自己的硅基员工</li>
+            <li><span class="day-tag report">交付</span>全公司硅基员工体系搭建完成，形成完整的 AI 工作流</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gantt Chart -->
+    <div class="gantt-container reveal" style="margin-top:3rem;">
+      <h3 style="font-size:1.1rem;font-weight:700;color:var(--text-bright);margin-bottom:1rem;">Phase 1 时间线</h3>
+      <div class="gantt">
+        <div class="gantt-header">
+          <span>工作流</span>
+          <span>D1</span><span>D2</span><span>D3</span><span>D4</span><span>D5</span>
+          <span>D6</span><span>D7</span><span>D8</span><span>D9</span><span>D10</span>
+        </div>
+        <!-- Row: 业务访谈 -->
+        <div class="gantt-row">
+          <div class="gantt-label">业务访谈 & 流程梳理</div>
+          <div class="gantt-cell"><div class="gantt-bar diag" style="animation-delay:0.1s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar diag" style="animation-delay:0.15s"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- Row: Workshop 第一场 -->
+        <div class="gantt-row">
+          <div class="gantt-label">全员 Workshop（第一场）</div>
+          <div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.15s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.2s"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- Row: 销售硅基员工 -->
+        <div class="gantt-row">
+          <div class="gantt-label">销售硅基员工搭建</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.2s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.25s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.3s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.35s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.4s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.45s"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- Row: Claude Code -->
+        <div class="gantt-row">
+          <div class="gantt-label">技术团队 Claude Code 配置</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.2s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.25s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.3s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.35s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.4s"></div></div>
+          <div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- Row: OpenClaw -->
+        <div class="gantt-row">
+          <div class="gantt-label">OpenClaw 部署</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.25s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.3s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar build" style="animation-delay:0.35s"></div></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+        </div>
+        <!-- Row: 试运行答疑 -->
+        <div class="gantt-row">
+          <div class="gantt-label">试运行 & 一对一答疑</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.45s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.5s"></div></div>
+          <div class="gantt-cell"></div>
+        </div>
+        <!-- Row: 其他部门答疑 -->
+        <div class="gantt-row">
+          <div class="gantt-label">其他部门随时答疑</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.25s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.3s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.35s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.4s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.45s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar train" style="animation-delay:0.5s"></div></div>
+          <div class="gantt-cell"></div>
+        </div>
+        <!-- Row: 结项 Workshop -->
+        <div class="gantt-row">
+          <div class="gantt-label">结项 Workshop + 成果确认</div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"></div><div class="gantt-cell"></div><div class="gantt-cell"></div>
+          <div class="gantt-cell"><div class="gantt-bar report" style="animation-delay:0.5s"></div></div>
+          <div class="gantt-cell"><div class="gantt-bar report" style="animation-delay:0.55s"></div></div>
+        </div>
+
+        <div class="gantt-legend">
+          <div class="gantt-legend-item"><div class="gantt-legend-dot diag"></div>诊断调研</div>
+          <div class="gantt-legend-item"><div class="gantt-legend-dot build"></div>搭建部署</div>
+          <div class="gantt-legend-item"><div class="gantt-legend-dot train"></div>培训答疑</div>
+          <div class="gantt-legend-item"><div class="gantt-legend-dot report"></div>汇报交付</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Detail -->
+<section id="detail">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-number">03 &mdash; 核心交付物</div>
+      <h2 class="section-title">Phase 1 你将拿到什么</h2>
+      <p class="section-desc">每一项交付都可验证、可衡量。不是给一个通用工具，而是针对我们的业务场景搭建的硅基员工。</p>
+    </div>
+
+    <!-- 交付物 1: 业务流程诊断 -->
+    <div class="deliverable-grid reveal">
+      <div class="deliverable-card">
+        <h4>业务流程诊断</h4>
+        <p>与销售和技术部门一对一深度沟通，完整映射现有工作流。</p>
+        <ul>
+          <li>各部门现有工作流程完整梳理</li>
+          <li>AI 自动化切入点识别与标注</li>
+          <li>落地优先级矩阵（先做什么、后做什么）</li>
+          <li>各岗位硅基员工功能定义</li>
+        </ul>
+      </div>
+
+      <div class="deliverable-card">
+        <h4>销售硅基员工矩阵</h4>
+        <p>为销售团队搭建一套完整的 AI 助理体系，覆盖日常核心业务场景。</p>
+        <ul>
+          <li>根据销售团队实际岗位定制 Agent</li>
+          <li>覆盖合同、订单、客户管理等核心环节</li>
+          <li>每个 Agent 配置完成即可上手使用</li>
+          <li>操作手册 & 使用培训</li>
+        </ul>
+        <span class="save-tag time">预计释放销售团队 30-40% 事务性工作时间</span>
+      </div>
+
+      <div class="deliverable-card">
+        <h4>前后端 AI 辅助开发环境</h4>
+        <p>为技术团队配置 Claude Code 开发环境，覆盖 PHP + Vue 技术栈。</p>
+        <ul>
+          <li>Claude Code 安装与项目适配</li>
+          <li>代码生成、Bug 修复、方案设计辅助</li>
+          <li>团队使用规范与最佳实践</li>
+          <li>相当于每个开发者多一个随时在线的高级工程师</li>
+        </ul>
+        <span class="save-tag quality">提升开发迭代速度与代码质量</span>
+      </div>
+
+      <div class="deliverable-card">
+        <h4>全员 AI Workshop（两场）</h4>
+        <p>不讲概念，全是实操。确保团队每个人都能用好 AI 工具。</p>
+        <ul>
+          <li>第一场（项目启动时）：AI 认知校准 + 场景演示 + 动手实操</li>
+          <li>第二场（项目收尾时）：使用经验分享 + 进阶技巧 + 全员答疑</li>
+          <li>项目期间随时为非重点部门提供答疑支持</li>
+          <li>发放 Prompt 模板库 & 操作指南</li>
+        </ul>
+        <span class="save-tag quality">让全员从"听说过AI"升级到"会用AI"</span>
+      </div>
+    </div>
+
+    <!-- Workshop 详细议程 -->
+    <div class="card reveal" style="margin-top:2rem;">
+      <h3 style="font-size:1.05rem;font-weight:700;color:var(--text-bright);margin-bottom:0.3rem;">Workshop 第一场 &middot; 详细议程</h3>
+      <p style="font-size:0.85rem;color:var(--text-dim);margin-bottom:1.5rem;">约 2 小时，目标：让每个人亲手用 AI 解决一个自己工作中的真实问题。</p>
+      <div class="workshop-timeline">
+        <div class="wt-item">
+          <div class="wt-time">0:00 - 0:15</div>
+          <div class="wt-content"><strong>破冰 & 认知校准</strong> — AI 现在能做什么、不能做什么。消除两种误解：高估（马上取代人）和低估（只是聊天机器人）。</div>
+        </div>
+        <div class="wt-item">
+          <div class="wt-time">0:15 - 0:45</div>
+          <div class="wt-content"><strong>场景化实操演示</strong> — 用公司真实业务场景演示：合同处理、客户分析、代码辅助。让大家看到"这就是我的工作，AI 能这样帮我"。</div>
+        </div>
+        <div class="wt-item">
+          <div class="wt-time">0:45 - 1:20</div>
+          <div class="wt-content"><strong>动手实操</strong> — 每人挑选一个自己工作中的真实场景，现场用 AI 解决。一对一辅导，确保每个人都能跑通。</div>
+        </div>
+        <div class="wt-item">
+          <div class="wt-time">1:20 - 1:45</div>
+          <div class="wt-content"><strong>Prompt 技巧 & 最佳实践</strong> — 教会 3 个核心技巧：任务拆解、角色设定、迭代优化。发放 Prompt 模板库。</div>
+        </div>
+        <div class="wt-item">
+          <div class="wt-time">1:45 - 2:00</div>
+          <div class="wt-content"><strong>Q&A + 需求收集</strong> — 收集各部门的具体需求和痛点，作为后续搭建的输入。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 其他部门赋能 -->
+    <div class="card reveal" style="margin-top:1.5rem;">
+      <h3 style="font-size:1.05rem;font-weight:700;color:var(--text-bright);margin-bottom:0.5rem;">其他部门同步赋能</h3>
+      <p style="font-size:0.88rem;color:var(--text);line-height:1.8;">
+        Phase 1 期间，销售和技术是核心交付，但我们不会让其他部门"干等着"。在项目推进过程中，我会同步为其他部门提供 AI 使用指导和答疑：
+      </p>
+      <ul style="margin-top:1rem;list-style:none;">
+        <li style="font-size:0.88rem;color:var(--text);padding:0.4rem 0;padding-left:1.2rem;position:relative;line-height:1.7;"><span style="position:absolute;left:0;color:var(--purple);font-weight:700;">·</span><strong style="color:var(--text-bright);">采购</strong> — 供应商比价、采购计划生成、成本分析等场景的 AI 使用方法</li>
+        <li style="font-size:0.88rem;color:var(--text);padding:0.4rem 0;padding-left:1.2rem;position:relative;line-height:1.7;"><span style="position:absolute;left:0;color:var(--purple);font-weight:700;">·</span><strong style="color:var(--text-bright);">行政 & 人力</strong> — 制度文档、会议纪要、简历筛选等高频场景的快速上手</li>
+        <li style="font-size:0.88rem;color:var(--text);padding:0.4rem 0;padding-left:1.2rem;position:relative;line-height:1.7;"><span style="position:absolute;left:0;color:var(--purple);font-weight:700;">·</span><strong style="color:var(--text-bright);">财务</strong> — 应收账款分析、报表处理、数据整理等场景指导</li>
+        <li style="font-size:0.88rem;color:var(--text);padding:0.4rem 0;padding-left:1.2rem;position:relative;line-height:1.7;"><span style="position:absolute;left:0;color:var(--purple);font-weight:700;">·</span><strong style="color:var(--text-bright);">运营</strong> — 数据分析、流程优化等日常工作中的 AI 辅助</li>
+      </ul>
+      <p style="font-size:0.88rem;color:var(--text);line-height:1.8;margin-top:1rem;">
+        这些指导穿插在项目全程，不额外收费。目标是让每个部门都先建立起基础的 AI 使用能力，为 Phase 2 的全面铺开做好准备，也让大家在 Phase 1 结束时就能感受到 AI 带来的实际变化。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ROI -->
+<section id="roi">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-number">04 &mdash; 投入与回报</div>
+      <h2 class="section-title">算清楚账，再做决定</h2>
+      <p class="section-desc">先把成本摊开，再看能换回什么。</p>
+    </div>
+
+    <div class="roi-grid reveal">
+      <!-- 成本侧 -->
+      <div class="roi-card">
+        <h3>需要投入多少</h3>
+        <div class="roi-item">
+          <span class="label"><strong>Phase 1 解决方案费</strong></span>
+          <span class="value cost">¥50,000</span>
+        </div>
+        <div class="roi-item">
+          <span class="label">AI 工具账号配置（含 Claude、Cursor、Mac 等）</span>
+          <span class="value cost">¥3,000 - 5,000（可选）</span>
+        </div>
+        <div class="roi-item" style="border-top:2px solid var(--border);padding-top:1rem;">
+          <span class="label">每月 AI Token 消耗</span>
+          <span class="value cost">¥1,000 - 5,000/月（根据模型能力及效果）</span>
+        </div>
+        <div class="roi-note">
+          AI 工具账号费用包含 2-3 个 Claude Code Max 订阅（技术团队开发辅助）及其他必要的高级 AI 工具账号。Token 消耗采用混合模型策略：复杂任务用强模型，简单任务用轻量模型，实际费用取决于使用频率和深度。
+        </div>
+      </div>
+
+      <!-- 回报侧 -->
+      <div class="roi-card">
+        <h3>能换回什么</h3>
+        <div class="roi-item">
+          <span class="label"><strong>销售团队事务性工作释放</strong></span>
+          <span class="value highlight">30-40%</span>
+        </div>
+        <div class="roi-item">
+          <span class="label">释放的精力投入</span>
+          <span class="value highlight">跑更多单子、覆盖更多渠道</span>
+        </div>
+        <div class="roi-item" style="border-top:2px solid var(--border);padding-top:1rem;">
+          <span class="label"><strong>后端开发交付能力</strong></span>
+          <span class="value highlight">显著提升</span>
+        </div>
+        <div class="roi-item">
+          <span class="label">功能迭代速度</span>
+          <span class="value highlight">更快占领市场</span>
+        </div>
+        <div class="roi-item" style="border-top:2px solid var(--border);padding-top:1rem;">
+          <span class="label"><strong>全员 AI 使用能力</strong></span>
+          <span class="value highlight">从 0 到 1 建立</span>
+        </div>
+        <div class="roi-note">
+          核心逻辑：硅基员工接管重复性事务后，销售团队能把精力集中在跑客户、谈合作上，覆盖更多渠道、更快响应需求。省下来的不只是时间，是让每个人都去做更有价值的事。
+        </div>
+      </div>
+    </div>
+
+    <!-- 长期价值 -->
+    <div class="reveal" style="margin-top:3rem;">
+      <h3 style="font-size:1.1rem;font-weight:700;color:var(--text-bright);margin-bottom:1.5rem;">长期价值</h3>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">&#128176;</div>
+          <div>
+            <h4>人效提升</h4>
+            <p>销售人员从重复性事务中解放，同样的团队规模能做更大的生意。不需要扩编就能支撑营收增长。</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">&#9201;</div>
+          <div>
+            <h4>响应速度</h4>
+            <p>方案、合同、报告等文档工作从天级缩短到分钟级。在关键节点比竞争对手更快一步。</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">&#128187;</div>
+          <div>
+            <h4>产品竞争力</h4>
+            <p>技术团队有 Claude Code 加持，SaaS 产品迭代更快。更快上线新功能，更强的市场竞争力。</p>
+          </div>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">&#127942;</div>
+          <div>
+            <h4>先发优势</h4>
+            <p>电力供应链行业绝大多数企业还没动。率先完成 AI 落地的企业，在效率和响应速度上将建立显著的竞争壁垒。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-number">05 &mdash; 报价方案</div>
+      <h2 class="section-title">两种合作方式</h2>
+      <p class="section-desc">可以分步走，也可以一步到位。根据节奏选择最适合的方式。</p>
+    </div>
+
+    <div class="pricing-grid reveal">
+      <!-- Plan A -->
+      <div class="pricing-card recommended">
+        <div class="pricing-recommended-tag">推荐</div>
+        <div class="pricing-tier">方案 A</div>
+        <div class="pricing-name">MVP 验证 + 第二期落地</div>
+        <div class="pricing-desc">先花 1-2 周验证效果，满意了再推进第二期。风险最低，节奏可控。</div>
+
+        <div style="margin-bottom:1.5rem;">
+          <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:0.3rem;">Phase 1 · MVP 验证</div>
+          <div class="pricing-amount">¥50,000</div>
+          <div style="font-size:0.82rem;color:var(--text-dim);margin-top:0.2rem;">1-2 周 · 按模块报价，可根据需求灵活增减</div>
+        </div>
+
+        <ul class="pricing-features">
+          <li><span class="check">&#10003;</span>业务深度访谈 & 流程诊断</li>
+          <li><span class="check">&#10003;</span>全员 AI Workshop（两场）</li>
+          <li><span class="check">&#10003;</span>销售硅基员工矩阵搭建</li>
+          <li><span class="check">&#10003;</span>前后端 Claude Code 环境配置</li>
+          <li><span class="check">&#10003;</span>OpenClaw 部署 & 配置</li>
+          <li><span class="check">&#10003;</span>操作手册 & 培训材料</li>
+          <li><span class="check">&#10003;</span>项目期间其他部门随时答疑</li>
+          <li><span class="check">&#10003;</span>成果确认 + 第二阶段规划</li>
+        </ul>
+
+        <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+          <div style="font-size:0.82rem;color:var(--text-dim);margin-bottom:0.3rem;">Phase 2 · 全公司铺开</div>
+          <div style="font-size:1.3rem;font-weight:800;color:var(--text-bright);">¥200,000 - 300,000</div>
+          <div style="font-size:0.82rem;color:var(--text-dim);margin-top:0.2rem;">五一前完成交付 · 根据模块及第一阶段推进情况具体确定</div>
+          <p style="font-size:0.82rem;color:var(--text);margin-top:0.5rem;line-height:1.6;">硅基员工扩展到其余部门 + 已有模块持续优化 + 各部门深度使用指导</p>
+        </div>
+      </div>
+
+      <!-- Plan B -->
+      <div class="pricing-card">
+        <div class="pricing-tier">方案 B</div>
+        <div class="pricing-name">整体打包推进</div>
+        <div class="pricing-price">
+          <span class="pricing-amount">¥220,000 - 300,000</span>
+        </div>
+        <div class="pricing-desc">一步到位，五一前完成全公司硅基员工体系搭建。按模块报价，根据实际需求灵活调整。</div>
+        <ul class="pricing-features">
+          <li><span class="check">&#10003;</span>Phase 1 全部内容</li>
+          <li><span class="check">&#10003;</span>其余部门硅基员工搭建</li>
+          <li><span class="check">&#10003;</span>全公司 AI 工作流体系</li>
+          <li><span class="check">&#10003;</span>各部门深度使用指导</li>
+          <li><span class="check">&#10003;</span>持续优化与迭代</li>
+        </ul>
+        <div style="margin-top:1rem;padding:0.8rem 1rem;background:var(--purple-dim);border-radius:var(--radius-sm);border:1px solid rgba(139,92,246,0.1);">
+          <p style="font-size:0.82rem;color:var(--text);">具体报价根据模块数量和业务复杂度确定。相比分阶段采购，打包方案在整体投入上更优。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 运营成本 -->
+    <div class="reveal" style="margin-top:3rem;">
+      <h3 style="font-size:1.1rem;font-weight:700;color:var(--text-bright);margin-bottom:1rem;">日常运营成本明细</h3>
+      <p style="font-size:0.88rem;color:var(--text-dim);margin-bottom:1.5rem;">解决方案费之外，AI 工具的日常运营成本透明可控。</p>
+      <table class="cost-table">
+        <thead>
+          <tr>
+            <th>项目</th>
+            <th>费用</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AI 工具账号配置</td>
+            <td>¥3,000 - 5,000（可选）</td>
+            <td>含 2-3 个 Claude Code Max 订阅（技术团队开发辅助）及其他必要 AI 工具账号</td>
+          </tr>
+          <tr>
+            <td>AI 模型 Token 消耗</td>
+            <td>¥1,000 - 5,000/月</td>
+            <td>根据模型能力及效果，混合模型策略：强模型处理复杂任务，轻量模型处理简单任务</td>
+          </tr>
+          <tr>
+            <td>OpenClaw 平台</td>
+            <td>已含在解决方案费中</td>
+            <td>部署、配置、维护均包含在服务中</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="next" class="cta-section">
+  <div class="container">
+    <div class="cta-box reveal">
+      <h2>准备好让硅基员工上岗了吗？</h2>
+      <p>确认方案后 3 天内可以入场，2 周内见到实际效果。</p>
+
+      <div class="cta-steps">
+        <div class="cta-step">
+          <div class="cta-step-num">1</div>
+          <div class="cta-step-text">确认方案</div>
+        </div>
+        <div class="cta-step-arrow">&#8594;</div>
+        <div class="cta-step">
+          <div class="cta-step-num">2</div>
+          <div class="cta-step-text">签约</div>
+        </div>
+        <div class="cta-step-arrow">&#8594;</div>
+        <div class="cta-step">
+          <div class="cta-step-num">3</div>
+          <div class="cta-step-text">3 天内入场</div>
+        </div>
+        <div class="cta-step-arrow">&#8594;</div>
+        <div class="cta-step">
+          <div class="cta-step-num">4</div>
+          <div class="cta-step-text">2 周见效果</div>
+        </div>
+      </div>
+
+      <div class="cta-contact">
+        <p style="margin-top:2rem;">
+          <span class="contact-name">Maxey（葛昊）</span><br>
+          <span style="font-size:0.88rem;color:var(--text);">AI 转型顾问</span>
+        </p>
+        <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-dim);">
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <p class="conf">CONFIDENTIAL &mdash; 仅供内部决策使用</p>
+    <p>&copy; 2026 &middot; 本方案有效期至 2026 年 4 月 30 日</p>
+  </div>
+</footer>
+
+<script>
+// Watermark
+(function() {
+  const container = document.getElementById('watermark');
+  const text = 'CONFIDENTIAL  机密文件';
+  const cols = 8, rows = 15;
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      const span = document.createElement('span');
+      span.className = 'watermark-text';
+      span.textContent = text;
+      span.style.left = (j * 280 - 100) + 'px';
+      span.style.top = (i * 220 - 50) + 'px';
+      container.appendChild(span);
+    }
+  }
+})();
+
+// Nav scroll
+(function() {
+  const nav = document.getElementById('nav');
+  const links = document.querySelectorAll('.nav-links a');
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+    let current = '';
+    sections.forEach(function(s) { if (window.scrollY >= s.offsetTop - 100) current = s.id; });
+    links.forEach(function(l) {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+    });
+  });
+})();
+
+// Scroll reveal
+(function() {
+  const reveals = document.querySelectorAll('.reveal');
+  function check() {
+    const h = window.innerHeight;
+    reveals.forEach(function(el) { if (el.getBoundingClientRect().top < h - 80) el.classList.add('visible'); });
+  }
+  window.addEventListener('scroll', check);
+  window.addEventListener('load', check);
+  check();
+})();
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    const t = document.querySelector(this.getAttribute('href'));
+    if (t) window.scrollTo({ top: t.offsetTop - 70, behavior: 'smooth' });
+  });
+});
+</script>
+
+</body>
+</html>
